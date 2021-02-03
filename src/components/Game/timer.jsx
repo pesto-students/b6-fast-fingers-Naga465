@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useEffect, useRef, useState } from "react";
+import { DIFFICULTY_FACTOR_INCREASE } from "../../utils/constants";
 import { getRandomWordAndTimerValue } from "../../utils/utilFunctions";
 import { CircleTimer } from "../forms";
 
@@ -12,6 +13,7 @@ function Timer({
   timerValue,
   score = 0,
   onScoreChange,
+  gameOver,
 }) {
   function resetState() {
     let { word, timerValue } = getRandomWordAndTimerValue({
@@ -23,7 +25,7 @@ function Timer({
     handleUserInputChange("");
     setWord(word);
     setTimeLimit(timerValue);
-    setDifficultyfactor((dFactor) => dFactor + 0.01);
+    setDifficultyfactor((dFactor) => dFactor + DIFFICULTY_FACTOR_INCREASE);
   }
 
   // -----> State
@@ -43,10 +45,11 @@ function Timer({
         if (counter === timeLimit) {
           updateTimerStatus(false);
           clearInterval(timer);
+          gameOver(score)
           return;
         }
         updateCounter((counter) => counter + 1);
-        onScoreChange(score + 1);
+        onScoreChange();
       }, 1000);
     }
 
@@ -70,7 +73,7 @@ function Timer({
   };
 
   return (
-    <div>
+    <div className ='flex_column'>
       <CircleTimer timeLimit={timeLimit} counter={counter} />
       <div>
         <div

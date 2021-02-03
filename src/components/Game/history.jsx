@@ -1,10 +1,9 @@
 import React, { useContext } from "react";
 import { PUBLIC_IMAGE_PATH } from "../../utils/constants";
 
-import { ScoreItem } from "../forms";
 import { UserContext } from "../UserContext";
 
-function History({ gamesHistory = [], bestScore = {}, ...rest }) {
+function History({ gameHistory = [], bestScore = {}, ...rest }) {
   const { username, gameLevel } = useContext(UserContext);
   return (
     <div style={{ minHeight: 100, minWidth: 100 }}>
@@ -26,19 +25,6 @@ function History({ gamesHistory = [], bestScore = {}, ...rest }) {
           <h1 style={{ paddingRight: 10, paddingLeft: 10 }}>{ele.label}</h1>
         </div>
       ))}
-      <div
-        style={{
-          border: "1px solid #ff5155",
-          paddingRight: 10,
-          paddingLeft: 10,
-          minHeight: 100,
-        }}
-      >
-        <h1> Score Board</h1>
-        {gamesHistory.map((gameScore, index) => (
-          <ScoreItem game_index={index} score={gameScore} />
-        ))}
-      </div>
     </div>
   );
 }

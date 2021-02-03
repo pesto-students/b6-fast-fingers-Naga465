@@ -7,17 +7,21 @@ class Home extends React.Component {
   static contextType = UserContext
 
   render() {
-    let {username,gameLevel} =  this.context || {}; 
+    let { username, gameLevel } =  this.context || {}; 
+    const {isError,message} =  this.props.error;
     return (
       <div style ={{marginTop:30}} className="main_container">
         <div style ={{alignItems:"center"}} className="flex_column">
           <APP_HEADER />
+          <div className = 'flex_column' style ={{marginBottom:20,alignItems:'flex-start'}}>
           <input
-          className = 'input-name'
+            className = 'input-name'
             value={username}
             onChange={this.props._handleUserChange}
             placeholder="Type your name"
           />
+          {isError && <label className = 'input_error'>{message}</label> } 
+          </div>
           <select
             className = 'select-level'
             value={gameLevel}

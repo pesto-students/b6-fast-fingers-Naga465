@@ -45,28 +45,29 @@ body {
   }
 }
 
-.header_container { 
-   display: flex;
-   flex-direction: column;
+.header_container {
+  display: flex;
+  flex-direction: column;
 }
 
 .header_label {
-   font-size: calc(1.375rem + 1.5vw);
-   color: #ff5155
+  font-size: calc(1.375rem + 1.5vw);
+  color: #ff5155;
 }
 
 .flex_column {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
-.start-game { 
+.start-game {
   font-size: 1.4em;
   font-weight: bold;
   color: #ff5155;
 }
 
-.flex_row { 
+.flex_row {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -77,14 +78,13 @@ body {
   justify-content: center;
   width: 100vw;
   height: 100vh;
-
 }
 
 /* Sets the containers height and width */
 .base-timer {
   position: relative;
-  height: 300px;
-  width: 300px;
+  height: 200px;
+  width: 200px;
 }
 
 /* Removes SVG styling that would hide the time label */
@@ -100,9 +100,9 @@ body {
 }
 .base-timer__label {
   position: absolute;
-  width: 300px;
-  height: 300px;
-  top: 0; 
+  width: 200px;
+  height: 200px;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,8 +131,7 @@ body {
   opacity: 0.59;
   border-radius: 5px;
   box-shadow: 0 3px 16px 0 rgba(0, 0, 0, 0.8);
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 40px;
   color: #032228;
   font-size: 1.4em;
   padding: 5px 15px 5px 15px;
@@ -154,21 +153,21 @@ body {
   /* appearance: none; */
 }
 
-.input-box{
-  background-color: hsla(0,0%,96.1%,.404);
-    height: 50px;
-    font-size: 1.5rem;
-    font-weight: 800;
-    border: none;
-    border-radius: 5px;
-    color: #000;
-    text-transform: uppercase;
-    max-width: 70%;
-    padding-left: 10px;
-    text-align: center
+.input-box {
+  background-color: hsla(0, 0%, 96.1%, 0.404);
+  height: 50px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  text-transform: uppercase;
+  max-width: 70%;
+  padding-left: 10px;
+  text-align: center;
 }
 
-.word-label { 
+.word-label {
   font-size: 2rem;
   color: #fff;
   font-weight: 800;
@@ -177,6 +176,50 @@ body {
 h1 {
   color: #ff5155;
 }
-h2 { 
+h2 {
   color: #ff5155;
+}
+
+.color-white {
+  color: white;
+}
+.color-default {
+  color: #ff5155;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin-top: 30px;
+  width: 90%;
+}
+.header_line {
+  height: 3px;
+  width: 150px;
+  background-color: #ff5155;
+}
+.score_history {
+  border: 1px solid #ff5155;
+  padding-right: 10px;
+  padding-left: 10px;
+  min-height: 300px;
+  min-width: 200px;
+  border-radius: 5px;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.input_error {
+  color: red;
+  font-size: 18px;
+  padding-top: 5px;
+}
+.image_width {
+  widows: 45px;
+}
+.score-text {
+  font-size: 18px;
+  font-weight: bold;
 }

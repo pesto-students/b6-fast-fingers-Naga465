@@ -15,3 +15,6 @@ export const PRIORITY_LEVEL_FOR_MEDIUM = 1.5
 export const PRIORITY_LEVEL_FOR_DIFFICULTY = 2
 
 export const DIFFICULTY_FACTOR_INCREASE = 0.01
+
+export const GAME_OVER = 'GAME_OVER'
+export const GAME_STARTED = 'GAME_STARTED'
