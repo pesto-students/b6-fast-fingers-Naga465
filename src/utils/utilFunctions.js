@@ -124,7 +124,6 @@ function getDifficultyFactor(gameLevel) {
 }
 
 function getDifficultyLevel(difficultyFactor) {
-  console.log(difficultyFactor, "--->factor");
   if (difficultyFactor <= PRIORITY_LEVEL_FOR_EASY) {
     return EASY_LEVEL;
   } else if (difficultyFactor <= PRIORITY_LEVEL_FOR_MEDIUM) {

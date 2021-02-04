@@ -35,7 +35,7 @@ class Game extends React.Component {
 
     this.state = {
       gameHistory: [],
-      bestScore: {},
+      bestScore: 0,
       score: 0,
       timerValue,
       word,
@@ -43,18 +43,46 @@ class Game extends React.Component {
       difficultyLevel,
       data,
       gameStatus: GAME_STARTED,
+      isCurrentIsBestScore: true,
     };
   }
 
   saveGameHistory = () => {
+    this.findBestScores();
     this.setState({
       gameStatus: GAME_OVER,
-      gameHistory: [...this.state.gameHistory, this.state.score],
     });
   };
 
   playAgain = () => {
     this.setState({ gameStatus: GAME_STARTED, score: 0 });
+  };
+
+  stopGame = () => {
+    if (this.state.gameStatus === GAME_STARTED) {
+      this.setState({ gameStatus: GAME_OVER });
+    } else {
+      this.props.quitGame();
+    }
+  };
+
+  findBestScores = () => {
+    let { gameHistory } = this.state;
+    if (!this.state.bestScore) {
+      this.setState({ bestScore: this.state.score, gameHistory: [] });
+      return;
+    }
+
+    if (this.state.score > this.state.bestScore) {
+      this.setState({
+        bestScore: this.state.score,
+        gameHistory: [...gameHistory, this.state.bestScore],
+      });
+    } else {
+      this.setState({
+        gameHistory: [...this.state.gameHistory, this.state.score],
+      });
+    }
   };
 
   render() {
@@ -71,8 +99,21 @@ class Game extends React.Component {
           <div className="score_history flex_column">
             <h2> Score Board</h2>
             {this.state.gameHistory.map((gameScore, index) => (
-              <ScoreItem game_index={index} score={gameScore} />
+              <ScoreItem key={index} game_index={index} score={gameScore} />
             ))}
+            {this.state.bestScore ? (
+              <div>
+                {" "}
+                <label className="color-default"> PERSONAL BEST </label>
+                <ScoreItem
+                  key={"best"}
+                  game_index={this.state.gameHistory.length}
+                  score={this.state.bestScore}
+                />
+              </div>
+            ) : (
+              <React.Fragment />
+            )}
           </div>
           <div style={{ flexGrow: 1 }}>
             {this.state.gameStatus === GAME_STARTED ? (
@@ -88,22 +129,27 @@ class Game extends React.Component {
                 gameIndex={this.state.gameHistory.length}
                 score={this.state.score}
                 onRestartGame={this.playAgain}
+                isThisBestScore={this.state.score >= this.state.bestScore}
               />
             )}
           </div>
         </div>
-        <div
-          style={{ width: "90%", alignItems: "center" }}
-          className="flex_row"
-        >
-          <img
-            className="image_width"
-            alt="stop-game"
-            src={`${PUBLIC_IMAGE_PATH}/reload-icon.svg`}
-          ></img>
-          <h1 style={{ paddingLeft: 15 }} className="color-default">
-            STOP GAME
-          </h1>
+        <div style={{ width: "90%", alignItems: "center" }}>
+          <div
+            style={{ width: 300 }}
+            className="flex_row"
+            onClick={this.stopGame}
+          >
+            <img
+              alt="stop-game"
+              src={`${PUBLIC_IMAGE_PATH}/cross-icon.svg`}
+            ></img>
+            <h1 style={{ paddingLeft: 15 }} className="color-default">
+              {this.state.gameStatus === GAME_STARTED
+                ? "STOP GAME"
+                : "QUIT GAME"}
+            </h1>
+          </div>
         </div>
       </div>
     );

@@ -205,11 +205,14 @@ h2 {
   border: 1px solid #ff5155;
   padding-right: 10px;
   padding-left: 10px;
+  padding-bottom: 15px;
   min-height: 300px;
   min-width: 200px;
   border-radius: 5px;
   align-items: center;
   margin-bottom: 30px;
+  max-height: 500px;
+  overflow-y: scroll;
 }
 .input_error {
   color: red;
@@ -217,7 +220,7 @@ h2 {
   padding-top: 5px;
 }
 .image_width {
-  widows: 45px;
+  width: 45px;
 }
 .score-text {
   font-size: 18px;

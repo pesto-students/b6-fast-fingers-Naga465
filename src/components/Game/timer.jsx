@@ -45,7 +45,7 @@ function Timer({
         if (counter === timeLimit) {
           updateTimerStatus(false);
           clearInterval(timer);
-          gameOver(score)
+          gameOver(score);
           return;
         }
         updateCounter((counter) => counter + 1);
@@ -73,7 +73,7 @@ function Timer({
   };
 
   return (
-    <div className ='flex_column'>
+    <div className="flex_column">
       <CircleTimer timeLimit={timeLimit} counter={counter} />
       <div>
         <div

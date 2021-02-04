@@ -23,6 +23,7 @@ class App extends React.Component {
       userInfo: { ...this.state.userInfo, gameLevel: event.target.value },
     });
   };
+
   handleUserChange = (e) => {
     this.setState({
       userInfo: {
@@ -32,6 +33,7 @@ class App extends React.Component {
       error: { isError: false, message: "" },
     });
   };
+  
   startGame = () => {
     if (!this.state.userInfo.username) {
       this.setState({
@@ -41,6 +43,10 @@ class App extends React.Component {
     }
     this.setState({ currentScreen: GAME_SCREEN });
   };
+
+  quitGame = () => {
+     this.setState({currentScreen:HOME_SCREEN})
+  }
 
   render() {
     const { currentScreen } = this.state;
@@ -56,7 +62,7 @@ class App extends React.Component {
               error={this.state.error}
             />
           ) : (
-            <Game />
+            <Game quitGame = {this.quitGame} />
           )}
         </div>
       </UserContext.Provider>

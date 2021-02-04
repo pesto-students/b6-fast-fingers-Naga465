@@ -18,7 +18,10 @@ const APP_HEADER = () => {
         className="flex_row"
       >
         <div className="header_line"></div>
-        <p className = 'color-default' style={{ paddingRight: 8, paddingLeft: 8 }}>
+        <p
+          className="color-default"
+          style={{ paddingRight: 8, paddingLeft: 8 }}
+        >
           {`the ultimate typing game`}
         </p>
         <div className="header_line"></div>
@@ -31,7 +34,9 @@ const ScoreItem = ({ game_index, score }) => {
   return (
     <div className="flex_row">
       <p className="color-white score-text">{`Game ${game_index + 1} : `}</p>
-      <p style ={{paddingLeft:8}} className="color-white score-text">{formatTime(score)}</p>
+      <p style={{ paddingLeft: 8 }} className="color-white score-text">
+        {formatTime(score)}
+      </p>
     </div>
   );
 };
@@ -44,7 +49,7 @@ const calcualteRemaingArc = ({ timeLimit, counter }) => {
 
 const CircleTimer = ({ counter, timeLimit }) => {
   return (
-    <div  className="base-timer">
+    <div className="base-timer">
       <svg
         className="base-timer__svg"
         viewBox="0 0 100 100"
@@ -64,7 +69,7 @@ const CircleTimer = ({ counter, timeLimit }) => {
             })} ${CIRCLE_ARC_LENGTH}`}
             id="base-timer-path-remaining"
             className="base-timer__path-remaining "
-            style={{ color: '#ff5155' }}
+            style={{ color: "#ff5155" }}
             d="
                 M 50, 50
                 m -45, 0
@@ -81,18 +86,29 @@ const CircleTimer = ({ counter, timeLimit }) => {
   );
 };
 
-export const GameOver = ({ gameIndex, score, onRestartGame, ...rest }) => {
+export const GameOver = ({
+  gameIndex,
+  score,
+  onRestartGame,
+  isThisBestScore,
+  ...rest
+}) => {
   return (
     <div style={{ alignItems: "center" }} className="flex_column">
       <h2 className="color-white"> {`SCORE : GAME${gameIndex} `}</h2>
       <h1 className="color-white"> {formatTime(score)}</h1>
+      {isThisBestScore && (
+        <h1 style={{ paddingLeft: 15 }} className="color-white">
+          {"New High Score"}
+        </h1>
+      )}
       <div
         onClick={onRestartGame}
         style={{ alignItems: "center" }}
         className="flex_row"
       >
         <img
-          className = 'image_width'
+          className="image_width"
           src={`${PUBLIC_IMAGE_PATH}/reload-icon.svg`}
           alt="restart game"
         ></img>
