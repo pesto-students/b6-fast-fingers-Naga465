@@ -7,11 +7,7 @@ const CIRCLE_ARC_LENGTH = 283;
 const APP_HEADER = () => {
   return (
     <div className="flex_column">
-      <img
-        style={{ width: 200 }}
-        alt="keyboard-logo"
-        src={`${PUBLIC_IMAGE_PATH}/keyboard-icon.svg`}
-      />
+      <img alt="keyboard-logo" src={`${PUBLIC_IMAGE_PATH}/keyboard-icon.svg`} />
       <label className="header_label">fast fingers</label>
       <div
         style={{ alignItems: "center", justifyContent: "space-between" }}

@@ -97,9 +97,9 @@ function formatTime(time) {
   const minuteCounter = Math.floor(time / 60);
 
   const formatedSeconds =
-    String(secondCounter).length === 1 ? `0${secondCounter}` : secondCounter;
+    `${secondCounter}`.length === 1 ? `0${secondCounter}` : secondCounter;
   const formatedMinutes =
-    String(minuteCounter).length === 1 ? `0${minuteCounter}` : minuteCounter;
+    `${minuteCounter}`.length === 1 ? `0${minuteCounter}` : minuteCounter;
   return `${formatedMinutes}:${formatedSeconds}`;
 }
 

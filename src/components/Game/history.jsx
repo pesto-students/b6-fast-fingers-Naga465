@@ -11,18 +11,11 @@ function History({ gameHistory = [], bestScore = {}, ...rest }) {
         { label: username, img: `/person-icon.svg` },
         { label: gameLevel, img: `/gamepad-icon.svg` },
       ].map((ele) => (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            color: "#ff5155",
-            margin: "auto",
-            paddingTop: 5,
-          }}
-        >
+        <div className="flex_row color-defalut padding_top_15">
           <img alt="user_logo" src={`${PUBLIC_IMAGE_PATH}${ele.img}`}></img>
-          <h1 style={{ paddingRight: 10, paddingLeft: 10 }}>{ele.label}</h1>
+          <label className="color-default text-style padding_left_15">
+            {ele.label}
+          </label>
         </div>
       ))}
     </div>

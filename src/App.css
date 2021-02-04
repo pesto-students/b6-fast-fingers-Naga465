@@ -226,3 +226,13 @@ h2 {
   font-size: 18px;
   font-weight: bold;
 }
+.text-style {
+  font-size: 26px;
+  font-weight: bold;
+}
+.padding_top_15 {
+  padding-top: 15px;
+}
+.padding_left_15 {
+  padding-left: 15px;
+}

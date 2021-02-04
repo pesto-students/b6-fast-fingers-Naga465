@@ -93,7 +93,7 @@ class Game extends React.Component {
           <Score value={this.state.score} />
         </div>
         <div
-          style={{ alignItems: "center", width: "90%" }}
+          style={{ alignItems: "center", width: "90%" ,marginTop:50}}
           className="flex_row"
         >
           <div className="score_history flex_column">
