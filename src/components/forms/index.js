@@ -2,7 +2,7 @@ import React from "react";
 import { PUBLIC_IMAGE_PATH } from "../../utils/constants";
 import { formatTime } from "../../utils/utilFunctions";
 
-const CIRCLE_ARC_LENGTH = 283;
+const CIRCLE_ARC_LENGTH = 283; // 2 * pi * r
 
 const APP_HEADER = () => {
   return (
@@ -91,7 +91,7 @@ export const GameOver = ({
 }) => {
   return (
     <div style={{ alignItems: "center" }} className="flex_column">
-      <h2 className="color-white"> {`SCORE : GAME${gameIndex} `}</h2>
+      <h2 className="color-white"> {`SCORE : GAME ${gameIndex + 1} `}</h2>
       <h1 className="color-white"> {formatTime(score)}</h1>
       {isThisBestScore && (
         <h1 style={{ paddingLeft: 15 }} className="color-white">

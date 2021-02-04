@@ -50,7 +50,6 @@ class App extends React.Component {
 
   render() {
     const { currentScreen } = this.state;
-    console.log(this.context, "--->context");
     return (
       <UserContext.Provider value={this.state.userInfo}>
         <div className="App">

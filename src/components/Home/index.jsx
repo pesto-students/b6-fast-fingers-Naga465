@@ -36,13 +36,13 @@ class Home extends React.Component {
           </select>
           <div
             title={"start_game"}
-            style={{ marginTop: 20 }}
+            style={{ marginTop: 20 ,cursor:'pointer'}}
             onClick={this.props.startGame}
             className="flex_row"
           >
             <img
               src={`${PUBLIC_IMAGE_PATH}/play-icon.svg`}
-              alt="start_game"
+              alt="start game"
             ></img>
             <label className="start-game"> START GAME </label>
           </div>
