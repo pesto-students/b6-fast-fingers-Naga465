@@ -209,7 +209,7 @@ h2 {
   min-height: 300px;
   min-width: 200px;
   border-radius: 5px;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 30px;
   max-height: 500px;
   overflow-y: scroll;
@@ -235,4 +235,12 @@ h2 {
 }
 .padding_left_15 {
   padding-left: 15px;
+}
+.best_score { 
+  background-color:black; 
+  color:#ff5155;
+  padding: 3px 7px 3px 7px;
+  margin-left: 10px;
+  border-radius: 3px;
+  font-size: small;
 }

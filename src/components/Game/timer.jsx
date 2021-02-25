@@ -1,92 +1,56 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useEffect, useRef, useState } from "react";
-import { DIFFICULTY_FACTOR_INCREASE } from "../../utils/constants";
-import { getRandomWordAndTimerValue } from "../../utils/utilFunctions";
-import { CircleTimer } from "../forms";
+import React, { useEffect, useRef } from "react";
+import CircleTimer from "../forms/circleTimer.jsx";
+import TextInput from "../forms/textInput.jsx";
+import useCounter from "./hooks/counter";
+import useWord from "./hooks/word";
 
-function Timer({
-  data,
-  difficultyFactor,
-  difficultyLevel,
-  word,
-  timerValue,
-  score = 0,
-  onScoreChange,
-  gameOver,
-}) {
-  function resetState() {
-    let { word, timerValue } = getRandomWordAndTimerValue({
-      dictionaryData: data,
-      difficultyFactor: dFactor,
-      difficultyLevel,
-    });
-    updateCounter(0);
-    handleUserInputChange("");
-    setWord(word);
-    setTimeLimit(timerValue);
-    setDifficultyfactor((dFactor) => dFactor + DIFFICULTY_FACTOR_INCREASE);
-  }
+function Timer({ data, updateScore, gameOver }) {
+  const timer = useRef(null);
 
-  // -----> State
-  const [counter, updateCounter] = useState(0);
-  const [userInput, handleUserInputChange] = useState("");
-  const [isTimerStart, updateTimerStatus] = useState(true);
-  const [randomWord, setWord] = useState(word);
-  const [timeLimit, setTimeLimit] = useState(timerValue);
-  const [dFactor, setDifficultyfactor] = useState(difficultyFactor);
-  const inputRef = useRef("");
+  const { counter, setCounter, resetCounter } = useCounter(0);
+  const { word, timeLimit, resetWord, textValue, setTextValue } = useWord({
+    data,
+  });
 
-  //  ----->  Timer side effect
   useEffect(() => {
-    let timer;
-    if (isTimerStart) {
-      timer = setInterval(() => {
-        if (counter === timeLimit) {
-          updateTimerStatus(false);
-          clearInterval(timer);
-          gameOver(score);
-          return;
-        }
-        updateCounter((counter) => counter + 1);
-        onScoreChange();
-      }, 1000);
-    }
+    timer.current = setInterval(() => {
+      setCounter((counter) => counter + 1);
+    }, 1000);
+    return () => {
+      // updating score and counter when word changes
+      clearInterval(timer.current);
+      updateScore((score) => score + timeLimit);
+      resetCounter();
+    };
+  }, [word]);
 
-    return () => clearInterval(timer);
+  useEffect(() => {
+    if (counter === timeLimit) {
+      clearTimeout(timer.current);
+      resetWord();
+      gameOver(timeLimit);
+      return;
+    }
   }, [counter]);
-
-  // ---->  User Input Side effets
-  useEffect(() => {
-    if (isTimerStart) {
-      if (randomWord === userInput.toLocaleLowerCase()) {
-        inputRef.current.value = userInput;
-        resetState();
-        return;
-      }
-    }
-  }, [userInput]);
-
-  const _handleChange = () => (e) => {
-    let { value } = e.target;
-    handleUserInputChange(value);
-  };
 
   return (
     <div className="flex_column">
-      <CircleTimer timeLimit={timeLimit} counter={counter} />
+      <CircleTimer timeLimit={timeLimit-1} counter={counter} />
       <div>
         <div
           style={{ alignItems: "center", justifyContent: "center" }}
           className="flex_row"
         >
-          {Array.from(randomWord).map((character, index) => (
+          {Array.from(word).map((character, index) => (
             <h2
+             key = {index}
               style={{
                 color:
-                  character === userInput.charAt(index).toLocaleLowerCase()
+                  character === textValue.charAt(index).toLowerCase()
                     ? "green"
-                    : index <= userInput.length - 1
+                    : index <= textValue.length - 1
                     ? "blue"
                     : "white",
               }}
@@ -96,12 +60,11 @@ function Timer({
             </h2>
           ))}
         </div>
-        <input
-          ref={inputRef}
-          className="input-box"
-          value={userInput.toUpperCase()}
-          onChange={_handleChange()}
-        ></input>
+        <TextInput
+          input_class="input-box"
+          onChange={({ target: { value } }) => setTextValue(value)}
+          value={textValue.toUpperCase()}
+        />
       </div>
     </div>
   );

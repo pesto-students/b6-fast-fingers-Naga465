@@ -1,72 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { GAME_SCREEN, HOME_SCREEN } from "./utils/constants";
 import Home from "./components/Home/index";
 import Game from "./components/Game/index";
-import { UserContext, userInfo } from "./components/UserContext";
+import { userInfo ,UserContext} from "./components/UserContext";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentScreen: HOME_SCREEN,
-      userInfo: { ...userInfo },
-      error: {
-        isError: false,
-        message: "",
-      },
-    };
-  }
+function App() {
+  const { username, gameLevel, theme } = userInfo;
+  const [name, setUsername] = useState(username);
+  const [level, setGameLevel] = useState(gameLevel);
+  const [screen, updateScreen] = useState(HOME_SCREEN);
 
-  handleLevelChange = (event) => {
-    this.setState({
-      userInfo: { ...this.state.userInfo, gameLevel: event.target.value },
-    });
+  const startGame = () => {
+    updateScreen(GAME_SCREEN);
   };
 
-  handleUserChange = (e) => {
-    this.setState({
-      userInfo: {
-        ...this.state.userInfo,
-        username: e.target.value,
-      },
-      error: { isError: false, message: "" },
-    });
+  const stopGame = () => {
+    updateScreen(HOME_SCREEN);
   };
-  
-  startGame = () => {
-    if (!this.state.userInfo.username) {
-      this.setState({
-        error: { isError: true, message: "Please type your name" },
-      });
-      return;
+
+  const getChildren = () => {
+    switch (screen) {
+      case HOME_SCREEN: {
+        return (
+          <Home
+            _handleLevelChange={({ target: { value } }) => setGameLevel(value)}
+            _handleUserChange={({ target: { value } }) => setUsername(value)}
+            startGame={startGame}
+            error={""}
+          />
+        );
+      }
+      case GAME_SCREEN: {
+        return <Game quitGame={stopGame} />;
+      }
+      default:
+        return <h1>Comming soon...</h1>;
     }
-    this.setState({ currentScreen: GAME_SCREEN });
   };
 
-  quitGame = () => {
-     this.setState({currentScreen:HOME_SCREEN})
-  }
-
-  render() {
-    const { currentScreen } = this.state;
-    return (
-      <UserContext.Provider value={this.state.userInfo}>
-        <div className="App">
-          {currentScreen === HOME_SCREEN ? (
-            <Home
-              _handleLevelChange={this.handleLevelChange}
-              _handleUserChange={this.handleUserChange}
-              startGame={this.startGame}
-              error={this.state.error}
-            />
-          ) : (
-            <Game quitGame = {this.quitGame} />
-          )}
-        </div>
-      </UserContext.Provider>
-    );
-  }
+  return (
+    <UserContext.Provider value={{ username: name, gameLevel: level, theme }}>
+      <div className="App">{getChildren()}</div>
+    </UserContext.Provider>
+  );
 }
-
 export default App;

@@ -88,8 +88,9 @@ function pickRandomWordFromList({ data = [], level }) {
   if (!level) {
     throw new Error("level is not defined");
   }
-  const filteredList = data[level];
-  return filteredList[Math.floor(Math.random() * filteredList.length)];
+  const filteredList = data[level] || [];
+  const randomIndex  =  Math.floor(Math.random() * filteredList.length)
+  return filteredList[randomIndex] || [];
 }
 
 function formatTime(time) {
@@ -134,20 +135,20 @@ function getDifficultyLevel(difficultyFactor) {
 }
 
 function getRandomWordAndTimerValue({
-  dictionaryData = [],
-  difficultyLevel,
+  data = [],
   difficultyFactor,
 }) {
+  let difficultyLevel = getDifficultyLevel(difficultyFactor);
   let word = pickRandomWordFromList({
-    data: dictionaryData,
+    data,
     level: difficultyLevel,
   });
-  let timerValue = calculateTimerValueinSec({
+  let timeLimit = calculateTimerValueinSec({
     length: word.length,
     difficultyFactor,
   });
 
-  return { word, timerValue };
+  return { word, timeLimit };
 }
 
 export {
