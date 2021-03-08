@@ -1,45 +1,56 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PlayerInfo from "./history";
 import Score from "./score.jsx";
 import Timer from "./timer";
-import {
-  GAME_OVER,
-  GAME_STARTED,
-} from "../../utils/constants";
+import { GAME_OVER, GAME_STARTED } from "../../utils/constants";
 import ScoreCard from "../forms/score";
 import { GameOver } from "../forms/gameOver";
 import Button from "../forms/button";
-import { getData } from "../../utils/utilFunctions";
-import useScore  from "./hooks/score";
+import useScore from "./hooks/score";
+import fetcher from "../../api";
+import { initState} from '../../authenticateService'
 
-function Game({ quitGame }) {
-  const { score, updateScore, resetScore} = useScore(0);
+function Game({ quitGame, ...props }) {
+  const { score, updateScore, resetScore } = useScore(0);
   const [gameHistory, updateGameHistory] = useState([]);
   const [gameStatus, updateGameStatus] = useState(GAME_STARTED);
-  const data = useRef(getData())
 
   const stopGame = () => {
     if (gameStatus === GAME_STARTED) {
       updateGameStatus(GAME_OVER);
     } else {
-      quitGame();
+      props.updateStorage(initState)
     }
   };
 
   const playAgain = () => {
     updateGameStatus(GAME_STARTED);
-    resetScore()
+    resetScore();
   };
 
-  const saveGameHistory = (timeLimit) => {
+  const saveGameHistory = async (timeLimit) => {
     updateGameStatus(GAME_OVER);
-    updateGameHistory([...gameHistory, score + timeLimit]);
+    let { data: newScore } = await fetcher("/game/update", {
+      method: "POST",
+      body: { score: score + timeLimit },
+    });
+    updateGameHistory([...gameHistory, newScore]);
   };
 
+  useEffect(() => {
+    const getHistory = fetcher("/game/get-history", { method: "GET" });
+    try {
+      getHistory.then((response) => {
+        updateGameHistory(response.data);
+      });
+    } catch (err) {
+      throw err;
+    }
+  }, []);
   return (
     <div className="flex_column">
       <div className="game-container">
-        <PlayerInfo />
+        <PlayerInfo {...props} />
         <Score score={score} />
       </div>
       <div
@@ -52,11 +63,11 @@ function Game({ quitGame }) {
             <Timer
               updateScore={updateScore}
               gameOver={saveGameHistory}
-              data = {data.current}
+              {...props}
             />
           ) : (
             <GameOver
-              gameHistory = {gameHistory}
+              gameHistory={gameHistory}
               score={score}
               onRestartGame={playAgain}
             />
@@ -72,4 +83,4 @@ function Game({ quitGame }) {
   );
 }
 
-export default Game;
+export default Game

@@ -131,7 +131,7 @@ body {
   opacity: 0.59;
   border-radius: 5px;
   box-shadow: 0 3px 16px 0 rgba(0, 0, 0, 0.8);
-  margin-top: 40px;
+  margin-top: 10px;
   color: #032228;
   font-size: 1.4em;
   padding: 5px 15px 5px 15px;
@@ -150,6 +150,7 @@ body {
   color: #97a5a7;
   padding-left: 15px;
   font-size: 1.4em;
+  align-items: center;
   /* appearance: none; */
 }
 
@@ -243,4 +244,38 @@ h2 {
   margin-left: 10px;
   border-radius: 3px;
   font-size: small;
+}
+.input-label { 
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+  font-style: italic;
+}
+.input-email {
+  width: 350px;
+  height: 25px; 
+  border:0;
+  background-color: transparent;
+  border-bottom: 1px solid #ff5155;
+  color:white;
+  font-size: 1.0em;
+  padding: 10px;
+  align-items: flex-start;
+}
+input:focus {
+  outline: transparent;
+}
+.submit-btn {
+    margin-top: 30px; 
+    background-color:#ff5155;
+    padding-left: 15px;
+    padding-right: 15px;
+    min-width: 200px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 20px;
+    color: #032228;
+    font-weight: bolder;
+    border: 0;
+    border-radius: 3px;
 }

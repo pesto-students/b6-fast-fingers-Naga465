@@ -6,25 +6,31 @@ import TextInput from "../forms/textInput.jsx";
 import useCounter from "./hooks/counter";
 import useWord from "./hooks/word";
 
-function Timer({ data, updateScore, gameOver }) {
+function Timer({
+  updateScore,
+  gameOver,
+  gameLevel = "easy_level",
+  updateStorage,
+}) {
   const timer = useRef(null);
-
   const { counter, setCounter, resetCounter } = useCounter(0);
   const { word, timeLimit, resetWord, textValue, setTextValue } = useWord({
-    data,
+    gameLevel,
+    initialDFactorValue: 1,
+    updateStorage,
   });
 
   useEffect(() => {
     timer.current = setInterval(() => {
       setCounter((counter) => counter + 1);
     }, 1000);
+
     return () => {
-      // updating score and counter when word changes
       clearInterval(timer.current);
       updateScore((score) => score + timeLimit);
       resetCounter();
     };
-  }, [word]);
+  }, [word,timeLimit]);
 
   useEffect(() => {
     if (counter === timeLimit) {
@@ -37,7 +43,7 @@ function Timer({ data, updateScore, gameOver }) {
 
   return (
     <div className="flex_column">
-      <CircleTimer timeLimit={timeLimit-1} counter={counter} />
+      <CircleTimer timeLimit={timeLimit - 1} counter={counter} />
       <div>
         <div
           style={{ alignItems: "center", justifyContent: "center" }}
@@ -45,7 +51,7 @@ function Timer({ data, updateScore, gameOver }) {
         >
           {Array.from(word).map((character, index) => (
             <h2
-             key = {index}
+              key={index}
               style={{
                 color:
                   character === textValue.charAt(index).toLowerCase()
@@ -70,4 +76,4 @@ function Timer({ data, updateScore, gameOver }) {
   );
 }
 
-export default Timer;
+export default Timer

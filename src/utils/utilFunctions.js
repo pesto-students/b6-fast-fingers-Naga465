@@ -1,96 +1,15 @@
-import data from "../data/dictionary.json";
 import {
   DEFAULT_INTERVAL_TIME,
   DIFFICULTY_LEVEL,
   EASY_LEVEL,
-  GAME_LEVELS,
   MEDIUM_LEVEL,
-  PRIORITY_LEVEL_FOR_DIFFICULTY,
   PRIORITY_LEVEL_FOR_EASY,
   PRIORITY_LEVEL_FOR_MEDIUM,
 } from "./constants";
 
-function getData() {
-  let dictionaryData = data;
-  let filterFunc = null;
-  try {
-    let dictionaryDataByLevels = GAME_LEVELS.reduce((prev, game_level) => {
-      switch (game_level) {
-        case EASY_LEVEL: {
-          filterFunc = (word) => word.length <= 4;
-          break;
-        }
-        case MEDIUM_LEVEL: {
-          filterFunc = (word) => word.length >= 5 && word.length <= 8;
-          break;
-        }
-        case DIFFICULTY_LEVEL: {
-          filterFunc = (word) => word.length >= 8;
-          break;
-        }
-        default: {
-        }
-      }
-      const { filteredData, remaningData } = filterDataByLevel({
-        filterFunc,
-        dictionaryData,
-      });
-      dictionaryData = remaningData;
-      return { ...prev, [game_level]: filteredData };
-    }, {});
-    return dictionaryDataByLevels;
-  } catch (err) {
-    throw err;
-  }
-}
-
-function filterDataByLevel({ filterFunc, dictionaryData }) {
-  if (typeof filterFunc != "function") {
-    throw TypeError("Filter funtion should be funtion");
-  }
-  let chunkData = chunks(dictionaryData, 500);
-  let filteredData = [];
-  let remaningData = [];
-
-  for (let ele of chunkData) {
-    let chunkValues = ele.reduce(
-      (prev, word) => {
-        if (filterFunc(word)) {
-          prev = { ...prev, filteredData: [...prev.filteredData, word] };
-        } else {
-          prev = { ...prev, remaningData: [...prev.remaningData, word] };
-        }
-        return prev;
-      },
-      { filteredData: [], remaningData: [] }
-    );
-    filteredData = [...filteredData, ...chunkValues.filteredData];
-    remaningData = [...remaningData, ...chunkValues.remaningData];
-  }
-
-  return { filteredData, remaningData };
-}
-
-function chunks(list = [], numOfChunks) {
-  let chunked = [];
-  for (let ele of list) {
-    let last = chunked[chunked.length - 1];
-    if (!last || last.length === numOfChunks) {
-      chunked.push([ele]);
-    } else {
-      last.push(ele);
-    }
-  }
-  return chunked;
-}
-
-function pickRandomWordFromList({ data = [], level }) {
-  if (!level) {
-    throw new Error("level is not defined");
-  }
-  const filteredList = data[level] || [];
-  const randomIndex  =  Math.floor(Math.random() * filteredList.length)
-  return filteredList[randomIndex] || [];
+function pickRandomWordFromList(data) {
+  const randomIndex = Math.floor(Math.random() * data.length);
+  return data[randomIndex];
 }
 
 function formatTime(time) {
@@ -111,19 +30,6 @@ function calculateTimerValueinSec({ length = 1, difficultyFactor = 1 }) {
     : Math.round(timerValue);
 }
 
-function getDifficultyFactor(gameLevel) {
-  switch (gameLevel) {
-    case EASY_LEVEL:
-      return PRIORITY_LEVEL_FOR_EASY;
-    case MEDIUM_LEVEL:
-      return PRIORITY_LEVEL_FOR_MEDIUM;
-    case DIFFICULTY_LEVEL:
-      return PRIORITY_LEVEL_FOR_DIFFICULTY;
-    default:
-      return PRIORITY_LEVEL_FOR_EASY;
-  }
-}
-
 function getDifficultyLevel(difficultyFactor) {
   if (difficultyFactor <= PRIORITY_LEVEL_FOR_EASY) {
     return EASY_LEVEL;
@@ -134,29 +40,26 @@ function getDifficultyLevel(difficultyFactor) {
   }
 }
 
-function getRandomWordAndTimerValue({
-  data = [],
-  difficultyFactor,
-}) {
-  let difficultyLevel = getDifficultyLevel(difficultyFactor);
-  let word = pickRandomWordFromList({
-    data,
-    level: difficultyLevel,
-  });
-  let timeLimit = calculateTimerValueinSec({
-    length: word.length,
-    difficultyFactor,
-  });
+function getRandomWordAndTimerValue({ data = [], difficultyFactor }) {
+  if (!data.length) throw new Error("Non empty List");
+  if (!difficultyFactor) throw new Error("Difficulty level needed");
 
-  return { word, timeLimit };
+  try {
+    let { word = "RANDOM" } = pickRandomWordFromList(data);
+    let timeLimit = calculateTimerValueinSec({
+      length: word.length,
+      difficultyFactor,
+    });
+    return { word, timeLimit };
+  } catch (err) {
+    throw err;
+  }
 }
 
 export {
-  getData,
   pickRandomWordFromList,
   formatTime,
   calculateTimerValueinSec,
-  getDifficultyFactor,
   getDifficultyLevel,
   getRandomWordAndTimerValue,
 };

@@ -1,18 +1,24 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useRef, useState } from "react";
+import fetcher from "../../../api";
 import { DIFFICULTY_FACTOR_INCREASE } from "../../../utils/constants";
-import { getRandomWordAndTimerValue } from "../../../utils/utilFunctions";
+import {
+  getDifficultyLevel,
+  getRandomWordAndTimerValue,
+} from "../../../utils/utilFunctions";
 
 export default function useWord({
   initialTimeLimit = 5,
   initialDFactorValue = 1,
-  initialWord = "start",
+  initialWord = '',
   initialTextValue = "",
-  data = [],
+  gameLevel,
+  updateStorage,
 }) {
   const [word, setWord] = useState(initialWord);
   const [timeLimit, setTimerValue] = useState(initialTimeLimit);
   const [textValue, setTextValue] = useState(initialTextValue);
-
+  const [words, updateWords] = useState([]);
   const difficultyFactor = useRef(initialDFactorValue);
 
   const resetWord = useCallback(() => {
@@ -22,24 +28,47 @@ export default function useWord({
     difficultyFactor.current = initialDFactorValue;
   }, [initialWord, initialDFactorValue, initialTimeLimit, initialTextValue]);
 
+  function nextWord(data = words) {
+    let { word, timeLimit } = getRandomWordAndTimerValue({
+      data,
+      difficultyFactor: difficultyFactor.current,
+    });
+    setWord(word);
+    setTimerValue(timeLimit);
+    setTextValue("");
+  }
+
   useEffect(() => {
-    function nextWord() {
-      let { word, timeLimit } = getRandomWordAndTimerValue({
-        data,
-        difficultyFactor: difficultyFactor.current,
-      });
-      setWord(word);
-      setTimerValue(timeLimit);
-      setTextValue("");
+    if (word === textValue.toLowerCase() && !!word) {
+      try {
+        difficultyFactor.current =
+          difficultyFactor.current + DIFFICULTY_FACTOR_INCREASE;
+        let { key: nextLevel } = getDifficultyLevel(difficultyFactor.current);
+        if (nextLevel !== gameLevel) {
+          updateStorage((state) => ({...state, gameLevel : nextLevel}));
+          return;
+        }
+        nextWord();
+      } catch (err) {
+        throw err;
+      }
     }
+  }, [word, textValue]);
 
-    if (word === textValue.toLowerCase()) {
-      difficultyFactor.current =
-        difficultyFactor.current + DIFFICULTY_FACTOR_INCREASE;
-      nextWord();
+  useEffect(() => {
+    async function getWords() {
+      try {
+        let { data = [] } = await fetcher(`/getword/${gameLevel}`, {
+          method: "GET",
+        });
+        updateWords(data);
+        nextWord(data);
+      } catch (err) {
+        throw err;
+      }
     }
-  }, [word, textValue, data]);
-
+    getWords();
+  }, [gameLevel]);
 
   return { word, resetWord, timeLimit, textValue, setTextValue };
 }
