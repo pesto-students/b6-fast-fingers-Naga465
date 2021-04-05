@@ -1,6 +1,6 @@
 import { getUser } from "./authenticateService";
 
-const BASE_URL = process.env.BASE_URL || "http://localhost:8000/api";
+const BASE_URL = process.env.BASE_URL || "http://localhost:8080/api";
 
 function fetcher(endpoint, headers) {
   const { token } = getUser('user');

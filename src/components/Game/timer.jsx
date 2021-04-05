@@ -70,6 +70,8 @@ function Timer({
           input_class="input-box"
           onChange={({ target: { value } }) => setTextValue(value)}
           value={textValue.toUpperCase()}
+          autoFocus = {true}
+
         />
       </div>
     </div>

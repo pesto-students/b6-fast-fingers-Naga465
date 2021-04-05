@@ -26,6 +26,7 @@ const TextInput = ({
         onChange={onChange}
         placeholder={placeholder}
         type={type}
+        {...rest}
       />
       {isError && <label className="input_error">{message}</label>}
     </div>
